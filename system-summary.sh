@@ -87,6 +87,9 @@ fi
 #  grep -i fail /var/log/messages
 #fi
 
+echo "=============="
+echo "Latest Updates:"
+
 # Check update history based on package manager used (replace this command with your own)
 if [ "$(which yum)" != "" ]; then
   echo "Yum package manager used"
@@ -96,6 +99,9 @@ elif [ "$(which apt)" != "" ]; then
   echo "Apt package manager used"
   # Print apt update history (replace this command with your own)
   zcat "/var/log/apt/history.log.* |"
+
+echo "=============="
+echo "Containers found:"
 
 # Check if docker is available
 if type docker > /dev/null 2>&1; then
@@ -111,12 +117,18 @@ if type podman > /dev/null 2>&1; then
   podman ps
 fi
 
+echo "=============="
+echo "Running and failed Services:"
+
 # List systemd services
 echo "Systemd services:"
 # List all loaded and active services
 systemctl list-units --type=service
 # List all loaded but failed services
 systemctl list-units --type=service --state=failed
+
+echo "=============="
+echo "Databases detected:"
 
 # Check if HANA is running
 if type hdbsql > /dev/null 2>&1; then
