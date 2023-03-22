@@ -25,22 +25,24 @@ mount | column -t |egrep "ext3|ext4|xfs|_netdev|cifs|nfs|btrfs"
 # Print disk usage
 echo "=============="
 echo "Disk Usage and Storage Informations:"
-
 df -h
-
 lsblk
+
 if type multipath > /dev/null 2>&1; then
   echo "Multipath is available"
   multipath status
 fi
+
 if type fcinfo > /dev/null 2>&1; then
   echo "FC is available"
   fcinfo status
 fi
+
 if type vgs > /dev/null 2>&1 && type lvs > /dev/null 2>&1; then
   echo "LVM is available"
   vgs; lvs
 fi
+
 if type mdadm > /dev/null 2>&1; then
   echo "Software RAID is available"
   cat /proc/mdstat
@@ -48,6 +50,7 @@ if type mdadm > /dev/null 2>&1; then
     mdadm --detail $md
   done
 fi
+
 if type iscsiadm > /dev/null 2>&1; then
   echo "iSCSI is available"
   iscsiadm --mode node --op show
@@ -61,14 +64,17 @@ if [ "$(which yum)" != "" ]; then
   yum history list allvi sys  
 elif [ "$(which apt)" != "" ]; then
   echo "Apt package manager used"
-  zcat "/var/log/apt/history.log.* |"
+  zcat /var/log/apt/history.log.* |
+  cat /var/log/apt/history.log |
+  grep "apt-get install" | sort -u
+fi
 
 echo "=============="
 echo "Containers:"
 
 if type docker > /dev/null 2>&1; then
   echo "Docker is available"
-    docker ps
+  docker ps
 fi
 
 if type podman > /dev/null 2>&1; then
@@ -88,16 +94,4 @@ echo "Databases detected:"
 
 if type hdbsql > /dev/null 2>&1; then
   echo "HANA is detected"
-fi
-
-if type mysql > /dev/null 2>&1; then
-  echo "MariaDB is detected"
-fi
-
-if type psql > /dev/null 2>&1; then
-  echo "PostgreSQL is detected"
-fi
-
-if type sqlplus > /dev/null 2>&1; then
-  echo "Oracle DB is available"
 fi
