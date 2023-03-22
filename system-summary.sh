@@ -25,13 +25,10 @@ mount | column -t |egrep "ext3|ext4|xfs|_netdev|cifs|nfs|btrfs"
 # Print disk usage
 echo "=============="
 echo "Disk Usage and Storage Informations:"
-echo ""
-echo ""
 
 df -h
-echo ""
+
 lsblk
-echo ""
 if type multipath > /dev/null 2>&1; then
   echo "Multipath is available"
   multipath status
@@ -61,7 +58,7 @@ echo "Latest Updates:"
 
 if [ "$(which yum)" != "" ]; then
   echo "Yum package manager used"
-  yum history list all
+  yum history list allvi sys  
 elif [ "$(which apt)" != "" ]; then
   echo "Apt package manager used"
   zcat "/var/log/apt/history.log.* |"
@@ -88,7 +85,6 @@ systemctl list-units --type=service --state=failed
 
 echo "=============="
 echo "Databases detected:"
-echo ""
 
 if type hdbsql > /dev/null 2>&1; then
   echo "HANA is detected"
